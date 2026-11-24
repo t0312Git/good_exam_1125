@@ -436,12 +436,109 @@
     }
     .btn-copy:hover { background: rgba(255, 255, 255, 0.28); }
     .hidden { display: none !important; }
+
+    /* 老師後台統計儀表板樣式 */
+    .btn-admin-toggle {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #f59e0b;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-admin-toggle:hover { background: #fde68a; }
+
+    #teacher-dashboard {
+      display: none;
+      max-width: 960px;
+      margin: 24px auto 60px;
+      padding: 0 16px;
+    }
+    .dash-header {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: #fff;
+      padding: 22px 24px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .dash-header h2 { margin: 0; font-size: 1.35rem; }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .kpi-label { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+    .kpi-val { font-size: 1.7rem; font-weight: 800; color: var(--primary); margin-top: 4px; }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 210px 1fr 75px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+    .bar-track {
+      background: #e2e8f0;
+      border-radius: 999px;
+      height: 14px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #dc2626);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+    .dash-table-wrap { overflow-x: auto; }
+    table.dash-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    table.dash-table th, table.dash-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      white-space: nowrap;
+    }
+    table.dash-table th {
+      background: #f8fafc;
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .pill-score {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .pill-high { background: #dcfce7; color: #166534; }
+    .pill-mid { background: #fef3c7; color: #92400e; }
+    .pill-low { background: #fee2e2; color: #991b1b; }
+
   </style>
 </head>
 <body>
 
-<header>
-  <div class="badge">木豆羊專賣店｜考前複習 5Q_1125</div>
+<header id="stealth-header" style="user-select:none;">
+  <div class="badge" id="stealth-trigger">木豆羊專賣店｜考前複習 5Q_1125</div>
   <h1>考前實力測驗（指數與對數函數）</h1>
   <p>兩階段闖關制：第一關基礎題（6題）答對至少 5 題，即可解鎖第二關進階題（4題）</p>
 </header>
@@ -458,7 +555,7 @@
   </div>
 </div>
 
-<div class="container">
+<div class="container" id="student-view">
   <!-- 學生基本資料 -->
   <div class="card">
     <strong style="font-size: 1.05rem; color: var(--primary);">📋 考生資料登錄（必填）</strong>
@@ -525,8 +622,108 @@
   </section>
 </div>
 
+
+<!-- 老師後台統計儀表板 -->
+<div id="teacher-dashboard">
+  <div class="dash-header">
+    <div>
+      <h2>👩‍🏫 老師後台｜考前實力測驗_1125 戰績與錯題統計</h2>
+      <div style="font-size:0.88rem; color:#cbd5e1; margin-top:4px;">支援 Google 試算表即時同步，或直接貼上學生 LINE 回報戰績文字批次統計</div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button type="button" class="btn-copy" style="margin:0;" onclick="loadFromGoogleSheets()">🔄 重新讀取雲端</button>
+      <button type="button" class="btn-copy" style="margin:0;" onclick="loadDemoStats()">📊 載入範例數據預覽</button>
+      <button type="button" class="btn-copy" style="margin:0;" onclick="exportCSV()">📥 匯出 CSV</button>
+      <button type="button" class="btn-copy" style="margin:0; background:#ef4444; border-color:#ef4444;" onclick="closeTeacherDashboard()">返回測驗頁</button>
+    </div>
+  </div>
+
+  <!-- 篩選與 LINE 回報貼上匯入區 -->
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div>
+        <label style="font-weight:700; color:var(--primary); margin-right:8px;">篩選班級：</label>
+        <select id="dash-class-filter" onchange="renderDashboard()" style="padding:8px 12px; border-radius:8px; border:1.5px solid #cbd5e1;">
+          <option value="ALL">全部班級（202 / 205 / 207）</option>
+          <option value="202">202 班</option>
+          <option value="205">205 班</option>
+          <option value="207">207 班</option>
+        </select>
+      </div>
+      <div id="dash-source-note" style="font-size:0.88rem; color:var(--muted);"></div>
+    </div>
+
+    <details style="margin-top:14px;">
+      <summary style="cursor:pointer; font-weight:700; color:var(--primary);">📋 尚未串接 Google 試算表？點此貼上學生在 LINE 複製回報的文字，立即自動統計！</summary>
+      <div style="margin-top:10px;">
+        <textarea id="line-paste-box" rows="4" style="width:100%; padding:10px; border-radius:8px; border:1.5px solid #cbd5e1; font-size:0.9rem;"
+          placeholder="請將學生在 LINE 群組回報的文字整段貼在這裡（可一次貼上多位同學），例如：&#10;【考前實力測驗_1125】202 05號 王小明｜總分：90/100（基礎 6/6、進階 3/4）｜總耗時：08分 25秒（第一關 04分 10秒）｜錯題：第9題"></textarea>
+        <button type="button" class="btn-submit" style="margin-top:8px; padding:8px 20px; font-size:0.95rem;" onclick="parseLineReports()">解析並加入統計</button>
+      </div>
+    </details>
+  </div>
+
+  <!-- 關鍵指標 KPI -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">已交卷人數</div>
+      <div class="kpi-val" id="kpi-count">0 人</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">平均總分</div>
+      <div class="kpi-val" id="kpi-avg">0 分</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">最高分 / 最低分</div>
+      <div class="kpi-val" id="kpi-range">-</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">平均作答時間</div>
+      <div class="kpi-val" id="kpi-time">-</div>
+    </div>
+  </div>
+
+  <!-- 各題答錯率統計長條圖 -->
+  <div class="card">
+    <strong style="font-size:1.05rem; color:var(--primary); display:block; margin-bottom:14px;">📉 各題答錯率排行（快速抓出全班卡關觀念）</strong>
+    <div id="question-stats-bars"></div>
+  </div>
+
+  <!-- 學生明細總表 -->
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <strong style="font-size:1.05rem; color:var(--primary);">🧑‍🎓 學生作答明細表</strong>
+      <div>
+        <label style="font-size:0.88rem; color:var(--muted);">排序依據：</label>
+        <select id="dash-sort" onchange="renderDashboard()" style="padding:6px 10px; border-radius:8px; border:1px solid #cbd5e1;">
+          <option value="seat">班級座號（由小到大）</option>
+          <option value="score_desc">總分（由高到低）</option>
+          <option value="score_asc">總分（由低到高）</option>
+          <option value="time_asc">作答時間（最快優先）</option>
+        </select>
+      </div>
+    </div>
+    <div class="dash-table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>班級</th>
+            <th>座號</th>
+            <th>姓名</th>
+            <th>總分</th>
+            <th>關卡明細</th>
+            <th>總作答時間</th>
+            <th>錯題紀錄</th>
+          </tr>
+        </thead>
+        <tbody id="dash-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <script>
-  const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRquW_1DNpYCMftq8G1EZ0zC_jAwqBW6yGnvbjdv80dRmt4PE0CqOTA-Vj_AdB_Qry/exec";
   let lastReportText = "";
   let stage1Passed = false;
   let finalSubmitted = false;
@@ -1051,6 +1248,236 @@
   function resetQuiz() {
     if (!confirm("確定要重新開始測驗嗎？計時器與所有作答紀錄將會重置。")) return;
     location.reload();
+  }
+
+
+  // ================= 老師後台統計功能 =================
+  const TEACHER_PASSCODE = "t0312_Math";
+  let dashboardRecords = [];
+
+  function openTeacherDashboard(skipPrompt = false) {
+    if (!skipPrompt) {
+      const pwd = prompt("請輸入老師後台管理密碼：");
+      if (pwd !== TEACHER_PASSCODE) {
+        if (pwd !== null) alert("密碼錯誤！");
+        return;
+      }
+    }
+    document.getElementById("student-view").classList.add("hidden");
+    document.getElementById("teacher-dashboard").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+      loadFromGoogleSheets();
+    } else if (dashboardRecords.length === 0) {
+      document.getElementById("dash-source-note").textContent = "目前尚未設定雲端網址，可點右上角「載入範例數據預覽」或貼上 LINE 回報文字。";
+      renderDashboard();
+    }
+  }
+
+  function closeTeacherDashboard() {
+    document.getElementById("teacher-dashboard").style.display = "none";
+    document.getElementById("student-view").classList.remove("hidden");
+  }
+
+  function loadFromGoogleSheets() {
+    const note = document.getElementById("dash-source-note");
+    if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+      alert("尚未設定 GOOGLE_SCRIPT_URL！請先依照教學部署 Google Apps Script 並填入網址，或使用下方「貼上 LINE 回報文字」功能。");
+      return;
+    }
+    note.textContent = "⏳ 正在從 Google 試算表同步最新作答紀錄...";
+    fetch(GOOGLE_SCRIPT_URL)
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.records) {
+          dashboardRecords = data.records;
+          note.textContent = `✅ 已同步雲端最新資料（共 ${dashboardRecords.length} 筆）`;
+          renderDashboard();
+        }
+      })
+      .catch(() => {
+        note.textContent = "⚠️ 無法讀取雲端資料，請確認 Google Apps Script 已部署為「任何人皆可存取」。";
+      });
+  }
+
+  function parseDurationToSec(str) {
+    if (!str) return 999999;
+    const m = String(str).match(/(\d+)\s*分\s*(\d+)\s*秒/);
+    if (m) return parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+    return 999999;
+  }
+
+  function parseLineReports() {
+    const text = document.getElementById("line-paste-box").value.trim();
+    if (!text) return;
+    const lines = text.split(/\n+/);
+    let added = 0;
+
+    lines.forEach(line => {
+      const m = line.match(/【考前實力測驗_1125】\s*(\d+)\s+(\d+)號\s+([^｜]+｜)\s*總分：(\d+)\/100（([^）]+)）｜總耗時：([^（｜]+)(?:（[^）]+）)?｜錯題：(.+)/);
+      if (m) {
+        dashboardRecords.push({
+          className: m[1],
+          seatNo: m[2].padStart(2, "0"),
+          studentName: m[3].replace("｜", "").trim(),
+          score: Number(m[4]),
+          stageDetail: m[5],
+          duration: m[6].trim(),
+          wrongQuestions: m[7].trim()
+        });
+        added++;
+      }
+    });
+
+    if (added > 0) {
+      document.getElementById("dash-source-note").textContent = `✅ 已成功匯入 ${added} 筆 LINE 回報紀錄（目前共 ${dashboardRecords.length} 筆）`;
+      document.getElementById("line-paste-box").value = "";
+      renderDashboard();
+    } else {
+      alert("找不到符合格式的回報文字，請確認包含【考前實力測驗_1125】開頭的完整字串。");
+    }
+  }
+
+  function loadDemoStats() {
+    dashboardRecords = [
+      { className: "202", seatNo: "01", studentName: "林宇軒", score: 100, stageDetail: "基礎:6/6 | 進階:4/4", duration: "07分 42秒", wrongQuestions: "全對" },
+      { className: "202", seatNo: "05", studentName: "陳品妍", score: 80, stageDetail: "基礎:6/6 | 進階:2/4", duration: "11分 15秒", wrongQuestions: "第8題, 第9題" },
+      { className: "202", seatNo: "12", studentName: "張祐誠", score: 70, stageDetail: "基礎:5/6 | 進階:2/4", duration: "14分 08秒", wrongQuestions: "第5題, 第8題, 第10題" },
+      { className: "205", seatNo: "03", studentName: "黃思涵", score: 90, stageDetail: "基礎:6/6 | 進階:3/4", duration: "09分 30秒", wrongQuestions: "第9題" },
+      { className: "205", seatNo: "14", studentName: "劉冠廷", score: 60, stageDetail: "基礎:5/6 | 進階:1/4", duration: "16分 20秒", wrongQuestions: "第3題, 第7題, 第8題, 第9題" },
+      { className: "207", seatNo: "08", studentName: "吳采霓", score: 80, stageDetail: "基礎:5/6 | 進階:3/4", duration: "10分 45秒", wrongQuestions: "第6題, 第8題" }
+    ];
+    document.getElementById("dash-source-note").textContent = "📊 目前顯示為範例統計數據（共 6 筆）";
+    renderDashboard();
+  }
+
+  function renderDashboard() {
+    const cls = document.getElementById("dash-class-filter").value;
+    const sortBy = document.getElementById("dash-sort").value;
+
+    let list = dashboardRecords.filter(r => cls === "ALL" || r.className === cls);
+
+    if (sortBy === "seat") {
+      list.sort((a, b) => (a.className + a.seatNo).localeCompare(b.className + b.seatNo));
+    } else if (sortBy === "score_desc") {
+      list.sort((a, b) => b.score - a.score);
+    } else if (sortBy === "score_asc") {
+      list.sort((a, b) => a.score - b.score);
+    } else if (sortBy === "time_asc") {
+      list.sort((a, b) => parseDurationToSec(a.duration) - parseDurationToSec(b.duration));
+    }
+
+    const n = list.length;
+    document.getElementById("kpi-count").textContent = `${n} 人`;
+
+    if (n === 0) {
+      document.getElementById("kpi-avg").textContent = "0 分";
+      document.getElementById("kpi-range").textContent = "-";
+      document.getElementById("kpi-time").textContent = "-";
+      document.getElementById("question-stats-bars").innerHTML = "<div style='color:var(--muted);'>尚無作答資料</div>";
+      document.getElementById("dash-tbody").innerHTML = "<tr><td colspan='7' style='text-align:center;color:var(--muted);'>尚無作答紀錄</td></tr>";
+      return;
+    }
+
+    const scores = list.map(r => r.score);
+    const avg = (scores.reduce((a, b) => a + b, 0) / n).toFixed(1);
+    const maxS = Math.max(...scores);
+    const minS = Math.min(...scores);
+    document.getElementById("kpi-avg").textContent = `${avg} 分`;
+    document.getElementById("kpi-range").textContent = `${maxS} / ${minS}`;
+
+    const validSecs = list.map(r => parseDurationToSec(r.duration)).filter(s => s < 999999);
+    if (validSecs.length > 0) {
+      const avgSec = Math.round(validSecs.reduce((a, b) => a + b, 0) / validSecs.length);
+      document.getElementById("kpi-time").textContent = formatDuration(avgSec);
+    } else {
+      document.getElementById("kpi-time").textContent = "-";
+    }
+
+    // 計算第 1~10 題答錯次數
+    const barsHTML = questions.map(q => {
+      let wrongCount = 0;
+      const pattern = new RegExp(`第${q.id}題(?!\\d)`);
+      list.forEach(r => {
+        if (pattern.test(r.wrongQuestions || "")) wrongCount++;
+      });
+      const pct = Math.round((wrongCount / n) * 100);
+      return `
+        <div class="bar-row">
+          <div><strong>第 ${q.id} 題</strong> <span style="font-size:0.8rem;color:var(--muted);">(${q.tag.split("｜")[1]})</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+          <div style="text-align:right;font-weight:700;color:${pct >= 50 ? '#dc2626' : '#334155'};">${wrongCount}人 (${pct}%)</div>
+        </div>
+      `;
+    }).join("");
+    document.getElementById("question-stats-bars").innerHTML = barsHTML;
+
+    // 渲染明細表格
+    const tbody = document.getElementById("dash-tbody");
+    tbody.innerHTML = list.map(r => {
+      const pillClass = r.score >= 80 ? "pill-high" : (r.score >= 60 ? "pill-mid" : "pill-low");
+      return `
+        <tr>
+          <td>${r.className} 班</td>
+          <td>${r.seatNo}</td>
+          <td><strong>${r.studentName}</strong></td>
+          <td><span class="pill-score ${pillClass}">${r.score} 分</span></td>
+          <td>${r.stageDetail}</td>
+          <td>${r.duration}</td>
+          <td style="white-space:normal; max-width:240px;">${r.wrongQuestions}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function exportCSV() {
+    if (dashboardRecords.length === 0) {
+      alert("目前沒有資料可匯出！");
+      return;
+    }
+    const headers = ["班級", "座號", "姓名", "總分", "關卡明細", "總作答時間", "錯題紀錄"];
+    const rows = dashboardRecords.map(r => [
+      r.className, r.seatNo, r.studentName, r.score, r.stageDetail, r.duration, `"${r.wrongQuestions}"`
+    ]);
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "考前實力測驗_1125_成績統計.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+
+  // 極簡隱藏版老師後台觸發機制（任選一種即可）：
+  // 1. 連點 2 下（雙擊）頂部深綠色標題區（手機／電腦皆可）
+  // 2. 在「姓名」欄位直接輸入 t0312_Math（免另外彈窗，直接解鎖進入後台！）
+  // 3. 網址後方加上 ?admin=1
+  let headerTapCount = 0;
+  let headerTapTimer = null;
+  document.getElementById("stealth-header").addEventListener("click", () => {
+    headerTapCount++;
+    clearTimeout(headerTapTimer);
+    if (headerTapCount >= 2) {
+      headerTapCount = 0;
+      openTeacherDashboard(false);
+    } else {
+      headerTapTimer = setTimeout(() => { headerTapCount = 0; }, 500);
+    }
+  });
+
+  document.getElementById("stu-name").addEventListener("input", (e) => {
+    if (e.target.value.trim() === TEACHER_PASSCODE) {
+      e.target.value = "";
+      openTeacherDashboard(true);
+    }
+  });
+
+  // 若網址帶有 ?admin=1 自動開啟老師後台
+  if (new URLSearchParams(window.location.search).get("admin") === "1") {
+    openTeacherDashboard(false);
   }
 
   renderQuiz();
