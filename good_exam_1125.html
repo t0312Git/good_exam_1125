@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>木豆羊專賣店｜考前實力測驗_1125（指數與對數函數・兩階段闖關版）</title>
+  <!-- KaTeX 數學公式渲染 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root {
+      --primary: #0f3d3e;
+      --primary-light: #1a5c5e;
+      --accent: #d97706;
+      --accent-bg: #fef3c7;
+      --bg: #f4f7f6;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --success: #059669;
+      --success-bg: #ecfdf5;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: #fff;
+      padding: 26px 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+    header .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    header h1 {
+      margin: 6px 0;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    header p {
+      margin: 4px 0 0;
+      font-size: 0.94rem;
+      color: #d1fae5;
+    }
+
+    /* 置頂進度與計時列 */
+    .status-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+    .status-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 0.92rem;
+    }
+    .stage-pills {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .stage-pill {
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .stage-pill.active {
+      background: var(--primary);
+      color: #fff;
+    }
+    .stage-pill.passed {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #6ee7b7;
+    }
+    .timer-badge {
+      font-weight: 700;
+      color: var(--primary);
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 22px auto 60px;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+    }
+
+    .student-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .field label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+    .field select, .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #ffffff;
+      transition: border-color 0.2s;
+    }
+    .field select:focus, .field input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .ref-box {
+      background: #f0fdf4;
+      border-left: 4px solid var(--success);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      margin-top: 16px;
+    }
+
+    .stage-banner {
+      background: #ffffff;
+      border-left: 5px solid var(--primary);
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .stage-banner h2 {
+      margin: 0;
+      font-size: 1.18rem;
+      color: var(--primary);
+    }
+    .stage-banner span {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .q-num {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--primary);
+    }
+    .q-tag {
+      font-size: 0.8rem;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .q-text {
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .option-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .option-label:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+    .option-label input[type="radio"] {
+      accent-color: var(--primary);
+      transform: scale(1.15);
+    }
+
+    .fill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .fill-input {
+      padding: 10px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      background: #ffffff;
+      color: var(--text);
+      min-width: 240px;
+    }
+    .fill-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* 分數格子 O / O 與 兩位數格子 O O 樣式 */
+    .slot-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+    }
+    .slot-digit {
+      width: 44px;
+      height: 46px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border: 1.5px solid #94a3b8;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--primary);
+    }
+    .slot-digit:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 61, 62, 0.12);
+    }
+    .slot-slash {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 0 2px;
+    }
+    .format-hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .hint-btn {
+      margin-top: 12px;
+      background: var(--accent-bg);
+      color: #92400e;
+      border: 1px solid #fcd34d;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .hint-box {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: #fffbeb;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      color: #78350f;
+      border: 1px dashed #f59e0b;
+    }
+
+    .solution-box {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+    }
+    .solution-box.correct {
+      background: var(--success-bg);
+      border: 1px solid #6ee7b7;
+      color: #065f46;
+    }
+    .solution-box.wrong {
+      background: var(--danger-bg);
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .btn-submit {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 14px 34px;
+      border-radius: 10px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(15, 61, 62, 0.25);
+      transition: transform 0.1s, background 0.2s;
+    }
+    .btn-submit:hover { background: var(--primary-light); }
+    .btn-submit:active { transform: scale(0.98); }
+
+    .btn-next {
+      background: #059669;
+      color: #fff;
+      border: none;
+      padding: 14px 34px;
+      border-radius: 10px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25);
+    }
+    .btn-next:hover { background: #047857; }
+
+    .btn-reset {
+      background: #fff;
+      color: var(--text);
+      border: 1.5px solid #cbd5e1;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .feedback-banner {
+      display: none;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+    .feedback-banner.fail {
+      background: #fef2f2;
+      border: 2px solid #f87171;
+      color: #991b1b;
+    }
+    .feedback-banner.pass {
+      background: #ecfdf5;
+      border: 2px solid #34d399;
+      color: #065f46;
+    }
+
+    #result-panel {
+      display: none;
+      background: linear-gradient(135deg, #0f3d3e 0%, #134e4a 100%);
+      color: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    #result-panel .score-big {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #fbbf24;
+      margin: 6px 0;
+    }
+    #sync-status {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #a7f3d0;
+    }
+    .btn-copy {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-copy:hover { background: rgba(255, 255, 255, 0.28); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">木豆羊專賣店｜考前複習 5Q_1125</div>
+  <h1>考前實力測驗（指數與對數函數）</h1>
+  <p>兩階段闖關制：第一關基礎題（6題）答對至少 5 題，即可解鎖第二關進階題（4題）</p>
+</header>
+
+<!-- 置頂關卡與作答計時列 -->
+<div class="status-bar">
+  <div class="status-inner">
+    <div class="stage-pills">
+      <span class="stage-pill active" id="pill-stage1">第一關：基礎題（第 1–6 題）</span>
+      <span style="color:#94a3b8;">➜</span>
+      <span class="stage-pill" id="pill-stage2">🔒 第二關：進階題（第 7–10 題）</span>
+    </div>
+    <div class="timer-badge">⏱️ 已作答時間：<span id="timer-text">00分 00秒</span></div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- 學生基本資料 -->
+  <div class="card">
+    <strong style="font-size: 1.05rem; color: var(--primary);">📋 考生資料登錄（必填）</strong>
+    <div class="student-grid">
+      <div class="field">
+        <label for="stu-class">班級</label>
+        <select id="stu-class">
+          <option value="">請選擇班級</option>
+          <option value="202">202 班</option>
+          <option value="205">205 班</option>
+          <option value="207">207 班</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="stu-seat">座號（兩位數，例如 05）</label>
+        <input type="text" id="stu-seat" placeholder="例如：08" maxlength="2" />
+      </div>
+      <div class="field">
+        <label for="stu-name">姓名</label>
+        <input type="text" id="stu-name" placeholder="請輸入真實姓名" />
+      </div>
+    </div>
+    <div class="ref-box">
+      <strong>📌 參考對數值：</strong> $\log 2 \approx 0.3010$，$\log 3 \approx 0.4771$，$\log 7 \approx 0.8451$
+    </div>
+  </div>
+
+  <!-- 第一關過關／未達標提示橫幅 -->
+  <div id="stage1-feedback" class="feedback-banner"></div>
+
+  <!-- 最終成績總結面板（第二關送交後顯示） -->
+  <div id="result-panel">
+    <div>🎉 兩階段測驗全數完成！您的總成績為</div>
+    <div class="score-big" id="score-display">0 / 100</div>
+    <div id="detail-display"></div>
+    <div id="time-summary" style="margin-top:6px; font-size:0.95rem; color:#fde68a;"></div>
+    <div id="sync-status">⏳ 正在傳送戰績至雲端紀錄表...</div>
+    <button type="button" class="btn-copy" onclick="copyReport()">📋 複製戰績回報文字</button>
+  </div>
+
+  <!-- 第一關：基礎題（第 1–6 題） -->
+  <section id="stage1-section">
+    <div class="stage-banner">
+      <h2>📘 第一關：基礎實力題（第 1–6 題）</h2>
+      <span>過關條件：答對 ≥ 5 題（未過關前不顯示錯題解析）</span>
+    </div>
+    <div id="stage1-container"></div>
+    <div class="actions" id="stage1-actions">
+      <button type="button" class="btn-submit" onclick="checkStage1()">送出第一關驗證（需答對 5 題）</button>
+    </div>
+  </section>
+
+  <!-- 第二關：進階題（第 7–10 題，過關後解鎖） -->
+  <section id="stage2-section" class="hidden">
+    <div class="stage-banner" style="border-left-color: #d97706;">
+      <h2>🔥 第二關：進階挑戰題（第 7–10 題）</h2>
+      <span>完成後點擊「最終交卷」即可查看全卷 10 題完整解析</span>
+    </div>
+    <div id="stage2-container"></div>
+    <div class="actions" id="stage2-actions">
+      <button type="button" class="btn-submit" onclick="submitFinalQuiz()">最終交卷並查看全卷詳解</button>
+      <button type="button" class="btn-reset" onclick="resetQuiz()">重新開始測驗</button>
+    </div>
+  </section>
+</div>
+
+<script>
+  const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
+  let lastReportText = "";
+  let stage1Passed = false;
+  let finalSubmitted = false;
+
+  // 計時器狀態
+  const startTimeMs = Date.now();
+  let stage1DurationSec = null;
+  let totalDurationSec = null;
+
+  function formatDuration(sec) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${String(m).padStart(2, "0")}分 ${String(s).padStart(2, "0")}秒`;
+  }
+
+  const timerInterval = setInterval(() => {
+    if (finalSubmitted) return;
+    const elapsed = Math.floor((Date.now() - startTimeMs) / 1000);
+    document.getElementById("timer-text").textContent = formatDuration(elapsed);
+  }, 1000);
+
+  // 題目清單（原第8題往前移至第6題，原第6、7題順延為第7、8題）
+  const questions = [
+    // --- 第一關：基礎題（1~6題） ---
+    {
+      id: 1,
+      stage: 1,
+      type: "choice",
+      tag: "基礎題｜指數比大小",
+      question: "比較 $a = \\sqrt{0.7}$，$b = (0.49)^{-0.75}$，$c = \\left(\\dfrac{10}{7}\\right)^{-\\frac{3}{5}}$ 三數的大小關係：",
+      options: [
+        "(1) $a > b > c$",
+        "(2) $b > c > a$",
+        "(3) $b > a > c$",
+        "(4) $c > b > a$",
+        "(5) $c > a > b$"
+      ],
+      answer: "2",
+      hint: "將三個數全部化為底數為 $\\dfrac{7}{10}$（介於 $0$ 與 $1$ 之間，嚴格遞減）的次方，再比較指數大小（注意不等號要反轉）！",
+      solution: "將三個數的底數統一改寫為 $\\dfrac{7}{10}$：<br>• $a = \\sqrt{0.7} = \\left(\\dfrac{7}{10}\\right)^{\\frac{1}{2}}$<br>• $b = (0.49)^{-0.75} = \\left[\\left(\\dfrac{7}{10}\\right)^2\\right]^{-\\frac{3}{4}} = \\left(\\dfrac{7}{10}\\right)^{-\\frac{3}{2}}$<br>• $c = \\left(\\dfrac{10}{7}\\right)^{-\\frac{3}{5}} = \\left(\\dfrac{7}{10}\\right)^{\\frac{3}{5}}$<br>因為底數 $0 < \\dfrac{7}{10} < 1$（指數越大、其值越小），且指數 $-\\dfrac{3}{2} < \\dfrac{1}{2} < \\dfrac{3}{5}$，故 $b > a > c$。"
+    },
+    {
+      id: 2,
+      stage: 1,
+      type: "fraction_slots",
+      tag: "基礎題｜指數方程式",
+      question: "解方程式 $(\\sqrt{2})^{2x+3} = 32$，可得 $x =$ ______。",
+      answers: ["7", "2"],
+      hint: "把 $\\sqrt{2}$ 寫成 $2^{\\frac{1}{2}}$，並將 $32$ 寫成 $2^5$，再比較指數。",
+      solution: "$(\\sqrt{2})^{2x+3} = 2^{\\frac{2x+3}{2}} = 2^5 \\implies \\frac{2x+3}{2} = 5 \\implies 2x + 3 = 10 \\implies x = \\dfrac{7}{2}$。"
+    },
+    {
+      id: 3,
+      stage: 1,
+      type: "choice",
+      tag: "基礎題｜指數不等式",
+      question: "解不等式 $2^{1-2x} - 33 \\times 2^{-x-2} + 1 < 0$，可得 $x$ 的範圍為：",
+      options: [
+        "(1) $-3 < x < 2$",
+        "(2) $-2 < x < 3$",
+        "(3) $x < -2$ 或 $x > 3$",
+        "(4) $-1 < x < 4$",
+        "(5) $\\frac{1}{8} < x < 4$"
+      ],
+      answer: "1",
+      hint: "先整理指數：$2^{1-2x} = 2 \\cdot (2^{-x})^2$，$2^{-x-2} = \\frac{1}{4} \\cdot 2^{-x}$，兩邊同乘 $4$ 後令 $t = 2^{-x} > 0$。",
+      solution: "原式改寫為 $2(2^{-x})^2 - \\frac{33}{4}(2^{-x}) + 1 < 0$，同乘 $4$ 得 $8t^2 - 33t + 4 < 0$（令 $t = 2^{-x}$）。<br>因式分解：$(8t - 1)(t - 4) < 0 \\implies \\frac{1}{8} < t < 4 \\implies 2^{-3} < 2^{-x} < 2^2 \\implies -3 < -x < 2 \\implies -2 < x < 3$。"
+    },
+    {
+      id: 4,
+      stage: 1,
+      type: "two_digit_slots",
+      tag: "基礎題｜對數方程式",
+      question: "解方程式 $\\log_3 x^7 + \\log_{\\frac{1}{3}} x = 24$，可得 $x =$ ______。",
+      answers: ["8", "1"],
+      hint: "注意真數 $x > 0$，且 $\\log_{\\frac{1}{3}} x = -\\log_3 x$。",
+      solution: "真數條件 $x > 0$。原式化為 $7\\log_3 x - \\log_3 x = 24 \\implies 6\\log_3 x = 24 \\implies \\log_3 x = 4 \\implies x = 3^4 = 81$。"
+    },
+    {
+      id: 5,
+      stage: 1,
+      type: "choice",
+      tag: "基礎題｜對數不等式",
+      question: "解不等式 $\\log_{\\frac{1}{2}}(3x - 1) + \\log_{\\frac{1}{2}}(2 - x) \\ge -1$，可得 $x$ 的範圍為：",
+      options: [
+        "(1) $1 \\le x \\le \\frac{4}{3}$",
+        "(2) $\\frac{1}{3} < x \\le 1$ 或 $\\frac{4}{3} \\le x < 2$",
+        "(3) $x \\le 1$ 或 $x \\ge \\frac{4}{3}$",
+        "(4) $\\frac{1}{3} < x < 2$",
+        "(5) $\\frac{4}{3} \\le x < 2$"
+      ],
+      answer: "1",
+      hint: "1. 先列真數大於 $0$；2. 底數 $\\frac{1}{2} < 1$，去對數時不等號方向要反轉！",
+      solution: "真數條件：$3x - 1 > 0$ 且 $2 - x > 0 \\implies \\frac{1}{3} < x < 2$。<br>合併對數：$\\log_{\\frac{1}{2}}[(3x - 1)(2 - x)] \\ge \\log_{\\frac{1}{2}} 2$，因底數 $\\frac{1}{2} < 1$ 遞減，故 $(3x - 1)(2 - x) \\le 2 \\implies 3x^2 - 7x + 4 \\ge 0 \\implies (3x - 4)(x - 1) \\ge 0$。<br>得 $x \\le 1$ 或 $x \\ge \\frac{4}{3}$，與真數條件取交集得 $\\frac{1}{3} < x \\le 1$ 或 $\\frac{4}{3} \\le x < 2$。"
+    },
+    {
+      id: 6,
+      stage: 1,
+      type: "dual_fill",
+      tag: "基礎題｜首尾數與首位數字",
+      question: "已知 $a$ 滿足 $\\log_{\\frac{1}{2}} a = 30$，試問將 $a$ 化成小數後，小數點後第 ______ 位始出現不為 $0$ 的數字，此數字為 ______。",
+      fields: [
+        { label: "(1) 小數點後第幾位 =", placeholder: "請輸入正整數", answers: ["10"] },
+        { label: "(2) 此數字為 =", placeholder: "請輸入數字", answers: ["9"] }
+      ],
+      hint: "先求出 $a = 2^{-30}$，取常用對數 $\\log a = -9.03 = -10 + 0.97$；負首數決定第幾位，正尾數 $0.97$ 與 $\\log 9 = 2\\log 3 \\approx 0.9542$ 比較大小即可求出首位非零數字！",
+      solution: "$a = \\left(\\frac{1}{2}\\right)^{30} = 2^{-30}$。取常用對數：$\\log a = -30 \\log 2 \\approx -30 \\times 0.3010 = -9.03 = -10 + 0.97$。<br>(1) 首數為 $-10$，故在小數點後第 $10$ 位開始出現不為 $0$ 的數字。<br>(2) 尾數為 $0.97$，因為 $\\log 9 = 2\\log 3 \\approx 2 \\times 0.4771 = 0.9542 < 0.97 < 1 = \\log 10$，所以 $a \\approx 9.3 \\times 10^{-10}$，此數字為 $9$。"
+    },
+
+    // --- 第二關：進階題（7~10題，順延） ---
+    {
+      id: 7,
+      stage: 2,
+      type: "fill",
+      tag: "進階題｜指數含對數方程式",
+      question: "解方程式 $x^{\\log x^3} = 100x$，可得 $x =$ ______。（若有兩解，請用半形逗號分隔）",
+      placeholder: "請輸入答案（多解請以逗號分隔）",
+      isSet: true,
+      answers: ["10", "10^(-2/3)"],
+      altAnswers: ["100", "1/10"],
+      hint: "兩邊同取常用對數 $\\log$，並令 $t = \\log x$ 解二次方程式。",
+      solution: "真數 $x > 0$。兩邊同取 $\\log$ 得：$\\log(x^{3\\log x}) = \\log(100x) \\implies 3(\\log x)^2 = 2 + \\log x$。<br>令 $t = \\log x$，得 $3t^2 - t - 2 = 0 \\implies (3t + 2)(t - 1) = 0 \\implies t = 1$ 或 $-\\frac{2}{3}$。<br>因此 $x = 10^1 = 10$ 或 $x = 10^{-\\frac{2}{3}}$。"
+    },
+    {
+      id: 8,
+      stage: 2,
+      type: "dual_fill",
+      tag: "進階題｜指數函數極值",
+      question: "已知函數 $f(x) = (2^{2x} + 2^{-2x}) - (2^x + 2^{-x})$，則：<br>(1) $f(x) = 0$ 的解為 $x =$ ______；<br>(2) $f(x)$ 的最小值為 ______。",
+      fields: [
+        { label: "(1) x =", placeholder: "請輸入數值", answers: ["0"] },
+        { label: "(2) 最小值 =", placeholder: "請輸入數值", answers: ["0", "-1/4", "-0.25"] }
+      ],
+      hint: "令 $t = 2^x + 2^{-x}$，由算幾不等式可知 $t \\ge 2$，且 $2^{2x} + 2^{-2x} = t^2 - 2$。",
+      solution: "令 $t = 2^x + 2^{-x} \\ge 2\\sqrt{2^x \\cdot 2^{-x}} = 2$，且 $2^{2x} + 2^{-2x} = t^2 - 2$。<br>函數改寫為 $g(t) = (t^2 - 2) - t = t^2 - t - 2 = \\left(t - \\frac{1}{2}\\right)^2 - \\frac{9}{4}$（$t \\ge 2$）。<br>(1) 令 $t^2 - t - 2 = 0 \\implies (t - 2)(t + 1) = 0 \\implies t = 2 \\implies 2^x + 2^{-x} = 2 \\implies x = 0$。<br>(2) 因定義域限制 $t \\ge 2$，在 $t = 2$ 時有最小值 $2^2 - 2 - 2 = 0$。"
+    },
+    {
+      id: 9,
+      stage: 2,
+      type: "fill",
+      tag: "進階題｜等比數列與對數不等式",
+      question: "已知 $\\langle a_n \\rangle$ 為一首項為 $2$，公比為 $\\sqrt{2}$ 的等比數列。試求不等式 $\\log_2 a_1 + \\log_2 a_2 + \\cdots + \\log_2 a_n > 200$ 的最小整數 $n$ 為 ______。",
+      placeholder: "請輸入正整數",
+      answers: ["27"],
+      altAnswers: ["28"],
+      hint: "等比數列取對數後會變成「等差數列」！先寫出一般項 $a_n = 2 \\cdot (\\sqrt{2})^{n-1} = 2^{\\frac{n+1}{2}}$。",
+      solution: "一般項 $a_n = 2 \\cdot (2^{\\frac{1}{2}})^{n-1} = 2^{\\frac{n+1}{2}}$，故 $\\log_2 a_n = \\frac{n+1}{2}$。<br>原不等式為 $\\sum_{k=1}^{n} \\frac{k+1}{2} = \\frac{1}{2} \\cdot \\frac{n(2 + n + 1)}{2} = \\frac{n(n+3)}{4} > 200 \\implies n(n+3) > 800$。<br>代入測試：$27 \\times 30 = 810 > 800$，而 $26 \\times 29 = 754 < 800$，故最小整數 $n = 27$。"
+    },
+    {
+      id: 10,
+      stage: 2,
+      type: "fill",
+      tag: "進階題｜指數應用模型",
+      question: "某種病毒傳染力極強，已知每 $1$ 個病毒在人體內每經過 $6$ 小時就會分裂成 $3$ 個，某人吸入 $100$ 個病毒進入體內，當體內達到 $2$ 億個病毒時，身體就會發病，在此期間稱為潛伏期，請問此病毒的潛伏期約有 ______ 天。（無條件進位至整數）",
+      placeholder: "請輸入整數天數",
+      answers: ["4"],
+      hint: "1 天有 $24$ 小時，每 $6$ 小時分裂一次，因此 $n$ 天共經過 $4n$ 次分裂。",
+      solution: "設潛伏期為 $n$ 天，共經過 $4n$ 次分裂，則：<br>$100 \\times 3^{4n} \\ge 2 \\times 10^8 \\implies 3^{4n} \\ge 2 \\times 10^6$<br>兩邊取常用對數：$\\log(3^{4n}) \\ge \\log(2 \\times 10^6) \\implies 4n \\times \\log 3 \\ge 6 + \\log 2$<br>$\\implies n \\ge \\frac{6 + 0.3010}{4 \\times 0.4771} \\approx \\frac{6.3010}{1.9084} \\approx 3.30$<br>無條件進位至整數，故潛伏期約有 $4$ 天。"
+    }
+  ];
+
+  function createQuestionCard(q) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.id = `q-card-${q.id}`;
+
+    let inputHTML = "";
+    if (q.type === "choice") {
+      inputHTML = `<div class="options">` + q.options.map((opt, oIdx) => `
+        <label class="option-label">
+          <input type="radio" name="q_${q.id}" value="${oIdx}" />
+          <span>${opt}</span>
+        </label>
+      `).join("") + `</div>`;
+    } else if (q.type === "fraction_slots") {
+      inputHTML = `
+        <div class="fill-group">
+          <span style="font-weight:700;">$x =$</span>
+          <div class="slot-box">
+            <input type="text" class="slot-digit" id="slot_${q.id}_0" maxlength="2" aria-label="分子" oninput="autoTab(this, 'slot_${q.id}_1')" />
+            <span class="slot-slash">/</span>
+            <input type="text" class="slot-digit" id="slot_${q.id}_1" maxlength="2" aria-label="分母" />
+          </div>
+          <span class="format-hint">（分數格：分子 / 分母）</span>
+        </div>`;
+    } else if (q.type === "two_digit_slots") {
+      inputHTML = `
+        <div class="fill-group">
+          <span style="font-weight:700;">$x =$</span>
+          <div class="slot-box">
+            <input type="text" class="slot-digit" id="slot_${q.id}_0" maxlength="1" aria-label="十位數" oninput="autoTab(this, 'slot_${q.id}_1')" />
+            <input type="text" class="slot-digit" id="slot_${q.id}_1" maxlength="1" aria-label="個位數" />
+          </div>
+          <span class="format-hint">（二位數格：每格填 1 個數字）</span>
+        </div>`;
+    } else if (q.type === "fill") {
+      inputHTML = `
+        <div class="fill-group">
+          <input type="text" class="fill-input" id="input_${q.id}" placeholder="${q.placeholder}" autocomplete="off" />
+        </div>`;
+    } else if (q.type === "dual_fill") {
+      inputHTML = `<div class="fill-group">` + q.fields.map((f, fIdx) => `
+        <div>
+          <label style="font-weight:600; margin-right:6px;">${f.label}</label>
+          <input type="text" class="fill-input" style="min-width:140px;" id="input_${q.id}_${fIdx}" placeholder="${f.placeholder}" autocomplete="off" />
+        </div>
+      `).join("") + `</div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-header">
+        <span class="q-num">第 ${q.id} 題</span>
+        <span class="q-tag">${q.tag}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${inputHTML}
+      <button type="button" class="hint-btn" onclick="toggleHint(${q.id})">💡 查看觀念提示</button>
+      <div class="hint-box" id="hint_${q.id}">${q.hint}</div>
+      <div class="solution-box" id="sol_${q.id}"></div>
+    `;
+    return card;
+  }
+
+  function renderQuiz() {
+    const c1 = document.getElementById("stage1-container");
+    const c2 = document.getElementById("stage2-container");
+    c1.innerHTML = "";
+    c2.innerHTML = "";
+
+    questions.forEach((q) => {
+      const card = createQuestionCard(q);
+      if (q.stage === 1) c1.appendChild(card);
+      else c2.appendChild(card);
+    });
+
+    if (window.renderMathInElement) {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false }
+        ]
+      });
+    }
+  }
+
+  function autoTab(el, nextId) {
+    if (el.value.length >= el.maxLength && nextId) {
+      const next = document.getElementById(nextId);
+      if (next) next.focus();
+    }
+  }
+
+  function toggleHint(id) {
+    const box = document.getElementById(`hint_${id}`);
+    box.style.display = box.style.display === "block" ? "none" : "block";
+  }
+
+  function normalizeStr(s) {
+    return (s || "").replace(/\s+/g, "").replace(/，/g, ",").toLowerCase();
+  }
+
+  function checkAnswer(q) {
+    if (q.type === "choice") {
+      const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+      const userVal = checked ? checked.value : "";
+      return {
+        isCorrect: userVal === q.answer,
+        userDisplay: checked ? q.options[parseInt(userVal, 10)] : "未作答"
+      };
+    }
+
+    if (q.type === "fraction_slots") {
+      const num = normalizeStr(document.getElementById(`slot_${q.id}_0`).value);
+      const den = normalizeStr(document.getElementById(`slot_${q.id}_1`).value);
+      if (!num && !den) return { isCorrect: false, userDisplay: "未作答" };
+      return {
+        isCorrect: num === q.answers[0] && den === q.answers[1],
+        userDisplay: `${num || "□"} / ${den || "□"}`
+      };
+    }
+
+    if (q.type === "two_digit_slots") {
+      const d1 = normalizeStr(document.getElementById(`slot_${q.id}_0`).value);
+      const d2 = normalizeStr(document.getElementById(`slot_${q.id}_1`).value);
+      if (!d1 && !d2) return { isCorrect: false, userDisplay: "未作答" };
+      return {
+        isCorrect: d1 === q.answers[0] && d2 === q.answers[1],
+        userDisplay: `${d1 || "□"}${d2 || "□"}`
+      };
+    }
+
+    if (q.type === "fill") {
+      const raw = document.getElementById(`input_${q.id}`).value;
+      const norm = normalizeStr(raw);
+      if (!norm) return { isCorrect: false, userDisplay: "未作答" };
+
+      if (q.isSet) {
+        const parts = norm.split(",").filter(Boolean).sort();
+        const ans1 = [...q.answers].map(normalizeStr).sort();
+        const ans2 = q.altAnswers ? [...q.altAnswers].map(normalizeStr).sort() : [];
+        const match1 = JSON.stringify(parts) === JSON.stringify(ans1);
+        const match2 = ans2.length > 0 && JSON.stringify(parts) === JSON.stringify(ans2);
+        return { isCorrect: match1 || match2, userDisplay: raw };
+      } else {
+        const valid = q.answers.map(normalizeStr);
+        const altValid = q.altAnswers ? q.altAnswers.map(normalizeStr) : [];
+        return {
+          isCorrect: valid.includes(norm) || altValid.includes(norm),
+          userDisplay: raw
+        };
+      }
+    }
+
+    if (q.type === "dual_fill") {
+      const v0 = document.getElementById(`input_${q.id}_0`).value;
+      const v1 = document.getElementById(`input_${q.id}_1`).value;
+      const ok0 = q.fields[0].answers.map(normalizeStr).includes(normalizeStr(v0));
+      const ok1 = q.fields[1].answers.map(normalizeStr).includes(normalizeStr(v1));
+      return {
+        isCorrect: ok0 && ok1,
+        userDisplay: `(1) ${v0 || "未填"}；(2) ${v1 || "未填"}`
+      };
+    }
+  }
+
+  function validateStudentInfo() {
+    const stuClass = document.getElementById("stu-class").value;
+    const stuSeat = document.getElementById("stu-seat").value.trim();
+    const stuName = document.getElementById("stu-name").value.trim();
+    if (!stuClass || !stuSeat || !stuName) {
+      alert("請先完整填寫「班級、座號、姓名」再進行驗證喔！");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return null;
+    }
+    return { stuClass, stuSeat, stuName };
+  }
+
+  // 第一關驗證：必須答對至少 5 題才可進入第二關；做錯題目此時不提供解析
+  function checkStage1() {
+    if (!validateStudentInfo()) return;
+
+    const stage1Qs = questions.filter(q => q.stage === 1);
+    let correctCount = 0;
+
+    stage1Qs.forEach(q => {
+      const res = checkAnswer(q);
+      const solBox = document.getElementById(`sol_${q.id}`);
+      solBox.style.display = "block";
+
+      if (res.isCorrect) {
+        correctCount++;
+        solBox.className = "solution-box correct";
+        solBox.innerHTML = `<strong>✅ 第 ${q.id} 題答對！</strong>（您的作答：${res.userDisplay}）`;
+      } else {
+        solBox.className = "solution-box wrong";
+        solBox.innerHTML = `<strong>❌ 第 ${q.id} 題尚未答對</strong>（您的作答：${res.userDisplay}）— <em>請自行檢視算式重新作答（完整詳解將於第二關最終交卷後統一公佈）</em>`;
+      }
+
+      if (window.renderMathInElement) {
+        renderMathInElement(solBox, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ]
+        });
+      }
+    });
+
+    const fb = document.getElementById("stage1-feedback");
+    fb.style.display = "block";
+
+    if (correctCount >= 5) {
+      stage1Passed = true;
+      stage1DurationSec = Math.floor((Date.now() - startTimeMs) / 1000);
+
+      fb.className = "feedback-banner pass";
+      fb.innerHTML = `
+        <strong style="font-size:1.15rem;">🎊 恭喜通過第一關基礎題！（答對 ${correctCount} / 6 題・第一關耗時 ${formatDuration(stage1DurationSec)}）</strong>
+        <p style="margin:6px 0 0;">已為您解鎖下方「第二關：進階挑戰題（第 7–10 題）」，請繼續完成作答並最終交卷！</p>
+      `;
+
+      // 鎖定第一關輸入，避免過關後更動
+      document.querySelectorAll("#stage1-container input").forEach(inp => inp.disabled = true);
+      document.getElementById("stage1-actions").classList.add("hidden");
+
+      // 解鎖第二關
+      document.getElementById("stage2-section").classList.remove("hidden");
+      const p1 = document.getElementById("pill-stage1");
+      const p2 = document.getElementById("pill-stage2");
+      p1.classList.remove("active");
+      p1.classList.add("passed");
+      p1.textContent = "✅ 第一關：基礎題（已過關）";
+      p2.classList.add("active");
+      p2.textContent = "🔥 第二關：進階題（作答中）";
+
+      document.getElementById("stage2-section").scrollIntoView({ behavior: "smooth" });
+    } else {
+      fb.className = "feedback-banner fail";
+      fb.innerHTML = `
+        <strong style="font-size:1.12rem;">⚠️ 第一關尚未達標（目前答對 ${correctCount} / 6 題，需至少答對 5 題）</strong>
+        <p style="margin:6px 0 0;">請針對上方標示 ❌ 的題目重新檢查計算過程（可點擊「💡 查看觀念提示」），修正後再次點擊「送出第一關驗證」！</p>
+      `;
+      fb.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  // 第二關最終交卷：結算全卷 10 題、紀錄總作答時間並顯示全部 10 題解析
+  function submitFinalQuiz() {
+    const info = validateStudentInfo();
+    if (!info) return;
+    if (!stage1Passed) {
+      alert("請先通過第一關基礎題（答對至少 5 題）！");
+      return;
+    }
+
+    finalSubmitted = true;
+    clearInterval(timerInterval);
+    totalDurationSec = Math.floor((Date.now() - startTimeMs) / 1000);
+    document.getElementById("timer-text").textContent = formatDuration(totalDurationSec);
+
+    let stage1Correct = 0;
+    let stage2Correct = 0;
+    const wrongList = [];
+
+    questions.forEach(q => {
+      const res = checkAnswer(q);
+      const solBox = document.getElementById(`sol_${q.id}`);
+      solBox.style.display = "block";
+
+      if (res.isCorrect) {
+        if (q.stage === 1) stage1Correct++;
+        else stage2Correct++;
+        solBox.className = "solution-box correct";
+        solBox.innerHTML = `<strong>✅ 答對了！</strong>（您的作答：${res.userDisplay}）<hr style="border:none;border-top:1px solid #a7f3d0;margin:8px 0;"><strong>📝 詳解：</strong><br>${q.solution}`;
+      } else {
+        wrongList.push(`第${q.id}題`);
+        solBox.className = "solution-box wrong";
+        solBox.innerHTML = `<strong>❌ 答錯了！</strong>（您的作答：${res.userDisplay}）<hr style="border:none;border-top:1px solid #fecaca;margin:8px 0;"><strong>📝 詳解：</strong><br>${q.solution}`;
+      }
+
+      if (window.renderMathInElement) {
+        renderMathInElement(solBox, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ]
+        });
+      }
+    });
+
+    // 鎖定第二關輸入
+    document.querySelectorAll("#stage2-container input").forEach(inp => inp.disabled = true);
+    document.getElementById("stage1-feedback").style.display = "none";
+
+    const p2 = document.getElementById("pill-stage2");
+    p2.classList.remove("active");
+    p2.classList.add("passed");
+    p2.textContent = "✅ 第二關：進階題（已完成）";
+
+    const totalCorrect = stage1Correct + stage2Correct;
+    const totalScore = totalCorrect * 10;
+    const wrongText = wrongList.length > 0 ? wrongList.join("、") : "全對無錯題";
+    const timeStr = formatDuration(totalDurationSec);
+    const s1TimeStr = formatDuration(stage1DurationSec || totalDurationSec);
+
+    lastReportText = `【考前實力測驗_1125】${info.stuClass} ${info.stuSeat.padStart(2, "0")}號 ${info.stuName}｜總分：${totalScore}/100（基礎 ${stage1Correct}/6、進階 ${stage2Correct}/4）｜總耗時：${timeStr}（第一關 ${s1TimeStr}）｜錯題：${wrongText}`;
+
+    const panel = document.getElementById("result-panel");
+    panel.style.display = "block";
+    document.getElementById("score-display").textContent = `${totalScore} / 100 分`;
+    document.getElementById("detail-display").textContent =
+      `班級座號：${info.stuClass} ${info.stuSeat}號 ${info.stuName} ｜ 基礎題 ${stage1Correct}/6・進階題 ${stage2Correct}/4` +
+      (wrongList.length > 0 ? ` ｜ 待訂正：${wrongList.join("、")}` : " ｜ 🏆 全部答對！");
+    document.getElementById("time-summary").textContent =
+      `⏱️ 總作答時間：${timeStr}（第一關過關耗時：${s1TimeStr}）`;
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    sendToGoogleSheets(info.stuClass, info.stuSeat, info.stuName, stage1Correct, stage2Correct, totalScore, timeStr, wrongList);
+  }
+
+  function copyReport() {
+    if (!lastReportText) return;
+    navigator.clipboard.writeText(lastReportText).then(() => {
+      alert("已複製戰績與作答時間文字，可直接貼上回報給老師！");
+    });
+  }
+
+  function sendToGoogleSheets(stuClass, stuSeat, stuName, s1Correct, s2Correct, totalScore, timeStr, wrongList) {
+    const statusEl = document.getElementById("sync-status");
+    if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+      statusEl.textContent = "ℹ️ 尚未設定雲端試算表網址（可點擊下方按鈕複製戰績與作答時間回報）。";
+      return;
+    }
+
+    const payload = {
+      examTitle: "考前實力測驗_1125",
+      className: stuClass,
+      seatNo: stuSeat.padStart(2, "0"),
+      studentName: stuName,
+      stageDetail: `基礎:${s1Correct}/6 | 進階:${s2Correct}/4 | 耗時:${timeStr}`,
+      score: totalScore,
+      correctCount: s1Correct + s2Correct,
+      totalQuestions: 10,
+      duration: timeStr,
+      wrongQuestions: wrongList.length > 0 ? wrongList.join(", ") : "全對"
+    };
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(() => {
+        statusEl.textContent = "✅ 戰績與作答時間已成功傳送至老師的 Google 試算表！";
+      })
+      .catch(() => {
+        statusEl.textContent = "⚠️ 雲端傳送發生網路異常，請點擊下方按鈕複製戰績或截圖回報老師。";
+      });
+  }
+
+  function resetQuiz() {
+    if (!confirm("確定要重新開始測驗嗎？計時器與所有作答紀錄將會重置。")) return;
+    location.reload();
+  }
+
+  renderQuiz();
+</script>
+
+</body>
+</html>
